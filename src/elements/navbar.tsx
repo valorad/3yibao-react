@@ -10,6 +10,7 @@ export default class Navbar extends React.Component {
   render() {
     return (
       <section className="navbar">
+        <div className="strip"></div>
         <nav>
           <h1>3yibao React</h1>
           <main>

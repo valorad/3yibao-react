@@ -1,8 +1,15 @@
 @import "../theme";
 
+div.strip {
+  height: 1em;
+  background-color: map-get($primary, "dark");
+}
+
 nav {
+  padding: 0 1em;
   display: flex;
   background-color: map-get($primary, "normal");
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
 }
 
 h1 {
@@ -14,9 +21,16 @@ ul {
 }
 
 li {
-  margin: 1em 1em;
+  padding: 1em 1em;
   a {
     color: black;
     padding: 1em 1em;
+    transition: all 0.2s ease-in-out;
+  }
+
+  a:hover {
+    color: white;
+    background-color: map-get($primary, "dark");
+    text-decoration: none;
   }
 }
