@@ -1,0 +1,22 @@
+@import "../theme";
+
+nav {
+  display: flex;
+  background-color: map-get($primary, "normal");
+}
+
+h1 {
+  margin: 1em;
+}
+
+ul {
+  display: flex;
+}
+
+li {
+  margin: 1em 1em;
+  a {
+    color: black;
+    padding: 1em 1em;
+  }
+}
