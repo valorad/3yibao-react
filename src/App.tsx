@@ -1,39 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
+import {
+  BrowserRouter as Router
+} from "react-router-dom";
+
 import './App.scss';
+
+import AppRoute from "./App.route";
+
+// Elements
+import Navbar from "./elements/navbar";
 
 export default class App extends Component {
 
   render() {
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            3yibao-react
-          </p>
-  
-        </header>
-      </div>
+      <section className="3yibaoReact">
+        <Router>
+          <Navbar />
+          
+          <main>
+            <AppRoute />
+          </main>
+
+          <footer>
+            © 2019 Valorad the Oneiroseeker
+          </footer>
+        </Router>
+      </section>
     );
   }
 
 }
-
-
-// const App: React.FC = () => {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           3yibao-react
-//         </p>
-
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
