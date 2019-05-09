@@ -1,0 +1,33 @@
+.billboard {
+
+  position: relative;
+
+  table {
+    text-align: center;
+    width: 100%;
+    background-color: black;
+  }
+  
+  tr {
+    display: flex;
+    width: 100%;
+  }
+  
+  td {
+    flex-grow: 1;
+    color: black;
+    // transition: all 1s ease-in;
+  }
+
+  td.active {
+    color: burlywood;
+  }
+  
+  h1 {
+    position: absolute;
+    color: red;
+    font-size: 2em;
+    top: 0.5em;
+    left: 0.5em;
+  }
+}
