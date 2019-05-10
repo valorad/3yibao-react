@@ -1,0 +1,41 @@
+section.boom {
+
+  position: absolute;
+
+  .holder {
+    display: flex;
+  }
+
+  picture {
+
+    display: flex;
+    position: relative;
+    animation: 1s ease-in boom;
+    opacity: 0;
+  }
+
+  h1 {
+    font-size: 3em;
+    position: absolute;
+    top: 3em;
+    left: 3.4em;
+    margin: 0;
+  }
+
+
+}
+
+@keyframes boom {
+  0% {
+
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+
+  100% {
+
+    transform: scale(2);
+  }
+
+}
