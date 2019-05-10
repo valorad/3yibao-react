@@ -5,7 +5,7 @@ import "./billboard.scss";
 export default class Billboard extends React.Component {
 
   settings = {
-    numRow: 4,
+    numRow: 5,
     numColumn: 20,
     lightInterval: 50
   };
@@ -52,11 +52,7 @@ export default class Billboard extends React.Component {
   lightManager = () => {
     return new Promise((resolve, reject) => {
       this.lightbottom().then( () => {
-
-        this.lightRight().then( () => {
-
-        });
-
+          this.lightRight().then();
         }
       );
 
@@ -258,7 +254,7 @@ export default class Billboard extends React.Component {
           </table>
         </div>
         <div className="contents">
-          <h1>恭喜3怡宝</h1>
+          <h1> <p className="zmLight">恭喜3怡宝</p> </h1>
         </div>
 
       </section>

@@ -1,6 +1,7 @@
 .billboard {
 
   position: relative;
+  overflow-x: hidden;
 
   table {
     text-align: center;
@@ -16,7 +17,6 @@
   td {
     flex-grow: 1;
     color: black;
-    // transition: all 1s ease-in;
   }
 
   td.active {
@@ -24,10 +24,40 @@
   }
   
   h1 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 0;
+
     position: absolute;
+    transform: translateY(50%);
+    bottom: 50%;
     color: red;
     font-size: 2em;
-    top: 0.5em;
-    left: 0.5em;
+
   }
+
+  p.zmLight {
+    width: calc(100% - 140px);
+    animation: 8s zoumalight infinite ease-in-out;
+    margin: 0;
+  }
+
+
+}
+
+@keyframes zoumalight {
+
+  0% {
+    transform: translateX(0%);
+  }
+
+  50% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+
 }

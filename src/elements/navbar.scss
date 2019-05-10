@@ -1,10 +1,5 @@
 @import "../theme";
 
-div.strip {
-  height: 1em;
-  background-color: map-get($primary, "dark");
-}
-
 .navbar {
   nav {
     padding: 0 1em;
@@ -35,4 +30,10 @@ div.strip {
       text-decoration: none;
     }
   }
+
+  .strip {
+    height: 1em;
+    background-color: map-get($primary, "dark");
+  }
+
 }
