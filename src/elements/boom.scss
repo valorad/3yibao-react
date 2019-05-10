@@ -1,17 +1,23 @@
 section.boom {
 
-  position: absolute;
+  position: relative;
 
   .holder {
+    position: absolute;
+
     display: flex;
   }
 
   picture {
-
+    align-items: center;
     display: flex;
     position: relative;
     animation: 1s ease-in boom;
-    opacity: 0;
+    opacity: 1;
+  }
+
+  img {
+    width: 31em;
   }
 
   h1 {
