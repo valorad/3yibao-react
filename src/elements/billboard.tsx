@@ -2,7 +2,7 @@ import React from 'react';
 
 import "./billboard.scss";
 
-export default class Billboard extends React.Component {
+export default class Billboard extends React.Component<any> {
 
   settings = {
     numRow: 5,
@@ -217,24 +217,6 @@ export default class Billboard extends React.Component {
     });
   };
 
-
-  // () => {
-  //   console.log("boom");
-  //   bottomRow[bulbIndex].active = true;
-  //   if (bulbIndex > 0) {
-  //     bottomRow[bulbIndex-1].active = false;
-  //   }
-  //   bulbIndex++;
-  //   this.refresh();
-  //   if (bulbIndex >= bottomRow.length) {
-  //     clearInterval(timer)
-  //     resolve();
-  //   }
-  // },
-  // 200
-
-
-
   state = {
     update: true,
     lightMatrix: this.formLightMatrix()
@@ -246,6 +228,7 @@ export default class Billboard extends React.Component {
   }
 
   render() {
+
     return (
       <section className="billboard">
         <div className="screen">
@@ -254,7 +237,7 @@ export default class Billboard extends React.Component {
           </table>
         </div>
         <div className="contents">
-          <h1> <p className="zmLight">恭喜3怡宝</p> </h1>
+          <h1> <p className="zmLight">恭喜<span>{this.props.yibao || 3}</span>怡宝</p> </h1>
         </div>
 
       </section>
