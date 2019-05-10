@@ -1,0 +1,32 @@
+section.storm {
+
+  position: absolute;
+
+  .holder {
+    display: flex;
+  }
+
+  picture {
+
+    display: flex;
+    position: relative;
+    // animation: 1s ease-in storm;
+    opacity: 1;
+  }
+
+}
+
+@keyframes storm {
+  0% {
+
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+
+  100% {
+
+    transform: scale(2);
+  }
+
+}
