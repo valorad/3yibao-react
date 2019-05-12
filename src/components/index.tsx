@@ -22,9 +22,23 @@ export default class Index extends React.Component<any, MasterState> {
   newExperience: any[] = [
     {
       name: "活力",
-      thresholds: [-3000, -2000, -1000, -750, -500, -350, -100, -50, 0, 50, 100, 150, 200, 300, 400, 500, 650, 800, 1000, 1500, 2000, 2500, 3000],
+      
+      level: {
+        thresholds: [-3000, -2000, -1000, -750, -500, -350, -100, -50, 0, 50, 100, 150, 200, 300, 400, 500, 650, 800, 1000, 1500, 2000, 2500, 3000],
+        order: "asc"
+      },
       offset: 0.5,
       magnifier: 10,
+    },
+    {
+      name: "负能量",
+      
+      level: {
+        thresholds: [100, 0, -100, -200, -300, -400, -500],
+        order: "desc"
+      },
+      offset: -2,
+      magnifier: 2,
     }
   ];
 
@@ -121,12 +135,28 @@ export default class Index extends React.Component<any, MasterState> {
     let exps: MasterState["experiences"] = [];
 
     for (let exp of this.newExperience) {
+
+      // sort array by given order
+      let sortMethod: (a: number, b: number) => number;
+      if (exp.level.order === "desc") {
+        sortMethod = (a, b) => {return b - a};
+      } else {
+        sortMethod = (a, b) => {return a - b};
+      }
+
+      if (!exp.level.thresholds) {
+        exp.level.thresholds = [0];
+      }
+
+      exp.level.thresholds.sort(sortMethod);
+
       exps.push({
         name: exp.name,
-        thresholds: exp.thresholds,
         offset: exp.offset || 0,
         magnifier: exp.magnifier || 1,
         level: {
+          thresholds: exp.level.thresholds,
+          order: exp.level.order || "asc",
           now: 0 // don't need to provide since is auto generated
         },
         currentValue: exp.currentValue || 0 // <-- acts as iniitial value
@@ -153,30 +183,65 @@ export default class Index extends React.Component<any, MasterState> {
       exp.currentValue += Math.ceil(exp.magnifier * this.generateGaussianRand() + exp.offset); // random walk with linear combination
 
       // current level
-      // e.g threshold [-100, -50, 0, 10, 100, 1000]
-      // position of exp = 0 should be "level 0". exp > 0, currentLv > 0; exp < 0, currentLv < 0
-      let lv0Pos = exp.thresholds.findIndex( ele => ele >= 0 );
-      if (!lv0Pos || lv0Pos === -1) {
-        // possibly the thresholds are all negative (e.g. Funengliang), then the last threshold is lv 0
-        lv0Pos = exp.thresholds.length - 1;
-      } 
 
-      
-      // e.g threshold [-100, -50, 0, 10, 100, 1000]
-      //                 ->0  ->1 ->2 ->3 ->4   ->5
-      // say current value is 7, then it should belone to level 0; 11 should be lv 1; -129 is lv. -2
-      let ceilingPos = exp.thresholds.findIndex( ele => ele > exp.currentValue )
+      // position of exp = 0 should be "level 0". exp < 0, currentLv < 0; exp > 0, currentLv > 0
+      let lv0Pos = 0;
 
-      
+      let ceilingPos = 0;
 
-      if (ceilingPos === -1) {
-        // this happens when current value is bigger than everyone in the threshold.
-        ceilingPos = exp.thresholds.length - 1;
+      if (exp.level.order === "desc") {
+        // experiences like "负能量" is ordered in desc
+        // meaning next level threshold is smaller than current value: e.g. 当前值: -20 / -50
+
+        lv0Pos = exp.level.thresholds.findIndex( ele => ele <= 0 );
+
+        if (!lv0Pos || lv0Pos === -1) {
+          // possibly the thresholds are all positive, then the last threshold is lv 0
+          lv0Pos = exp.level.thresholds.length - 1;
+        } 
+
+        // e.g threshold [100, 0, -100, -200, -300, -400, -500]
+        //               ->0  ->1   ->2   ->3   ->4   ->5  ->6
+        // say current value is -50, then it should belone to level 0; -111 should be lv -1; 50 is lv. 0 (max)
+        ceilingPos = exp.level.thresholds.findIndex( ele => ele < exp.currentValue )
+
+        if (ceilingPos === -1) {
+          // this happens when current value is smaller than everyone in the threshold.
+          ceilingPos = exp.level.thresholds.length;
+        }
+
+        exp.level.lv0pos = lv0Pos;
+        exp.level.nextPos = ceilingPos;
+        exp.level.now = lv0Pos - ceilingPos + 1;
+        exp.level.max = exp.level.lv0pos - (exp.level.thresholds.length - 1);
+        
+
+      } else {
+        // by default, exp is ordered in asc
+
+        lv0Pos = exp.level.thresholds.findIndex( ele => ele >= 0 );
+
+        if (!lv0Pos || lv0Pos === -1) {
+          // possibly the thresholds are all negative, then the last threshold is lv 0
+          lv0Pos = exp.level.thresholds.length - 1;
+        } 
+
+        // e.g threshold [-100, -50, 0, 10, 100, 1000]
+        //                 ->0  ->1 ->2 ->3 ->4   ->5
+        // say current value is 7, then it should belone to level 0; 11 should be lv 1; -129 is lv. -2
+        ceilingPos = exp.level.thresholds.findIndex( ele => ele > exp.currentValue );
+
+        if (ceilingPos === -1) {
+          // this happens when current value is bigger than everyone in the threshold.
+          ceilingPos = exp.level.thresholds.length - 1;
+        }
+
+        exp.level.lv0pos = lv0Pos;
+        exp.level.nextPos = ceilingPos;
+        exp.level.now = ceilingPos - lv0Pos;
+        exp.level.max = exp.level.thresholds.length - 1 - exp.level.lv0pos;
+
       }
-      
-      exp.level.lv0pos = lv0Pos;
-      exp.level.nextPos = ceilingPos;
-      exp.level.now = ceilingPos - lv0Pos;
 
     }
 

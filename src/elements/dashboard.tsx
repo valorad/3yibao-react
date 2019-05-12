@@ -12,22 +12,28 @@ export default class Dashboard extends React.Component<any, any> {
     let exps = this.props.masterState.experiences.map((exp: MasterState["experiences"][0]) => {
 
       if (exp.level.nextPos === undefined) {
-        exp.level.nextPos = exp.thresholds.length - 1
+        exp.level.nextPos = exp.level.thresholds.length - 1
       }
 
       if (!exp.level.lv0pos) {
-        exp.level.lv0pos = 0
+        exp.level.lv0pos = 0;
+      }
+
+      if (!exp.level.max) {
+        exp.level.max = 0;
       }
 
       // get next Threshold
       let nextThreshold = "";
-      let maxlevel =  exp.thresholds.length - 1 - exp.level.lv0pos;
 
-      if (exp.level.now < maxlevel) {
-        nextThreshold = `${exp.thresholds[exp.level.nextPos]}`;
-      } else {
-        nextThreshold = "满级";
-      }
+      if (
+        (exp.level.order === "desc" && exp.level.now > exp.level.max) ||
+        (exp.level.order === "asc" && exp.level.now < exp.level.max)
+        ) {
+          nextThreshold = `${exp.level.thresholds[exp.level.nextPos]}`;
+        } else {
+          nextThreshold = "满级";
+        }
 
       return (
 

@@ -7,10 +7,12 @@ interface probability {
 
 interface experience {
   name: string,
-  thresholds: number[],
+  
   offset: number,
   magnifier: number,
   level: {
+    thresholds: number[],
+    order: "asc" | "desc",
     max?: number,
     lv0pos?: number,
     nextPos?: number
