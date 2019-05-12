@@ -10,12 +10,31 @@ export default class Dashboard extends React.Component<any, any> {
 
   placeExps = () => {
     let exps = this.props.masterState.experiences.map((exp: MasterState["experiences"][0]) => {
+
+      if (exp.level.nextPos === undefined) {
+        exp.level.nextPos = exp.thresholds.length - 1
+      }
+
+      if (!exp.level.lv0pos) {
+        exp.level.lv0pos = 0
+      }
+
+      // get next Threshold
+      let nextThreshold = "";
+      let maxlevel =  exp.thresholds.length - 1 - exp.level.lv0pos;
+
+      if (exp.level.now < maxlevel) {
+        nextThreshold = `${exp.thresholds[exp.level.nextPos]}`;
+      } else {
+        nextThreshold = "满级";
+      }
+
       return (
 
         <div key={exp.name}>
           <p>{exp.name}：</p>
-          <p>当前值：{exp.currentValue} / 200</p>
-          <p>当前等级: {exp.currentLevel}</p>
+          <p>当前值：{exp.currentValue} / {nextThreshold}</p>
+          <p>当前等级: {exp.level.now}</p>
         </div>
         
       );
@@ -26,11 +45,14 @@ export default class Dashboard extends React.Component<any, any> {
 
   placeProbs = () => {
 
-     let probs = this.props.masterState.probabilities.map((prob: MasterState["probabilities"][0]) => {
+    let probs = this.props.masterState.probabilities.map((prob: MasterState["probabilities"][0]) => {
+      
+      let loseMessage = prob.loseMessage.replace(/<%yibao>/g, this.props.masterState.yibao);
+      
       return (
 
         <div key={prob.name}>
-          <p>{prob.name}：{prob.currentProb}</p>
+          <p>{prob.name}：{prob.currentProb > 0.00001 ? prob.currentProb + " % ": loseMessage}</p>
         </div>
         
       );

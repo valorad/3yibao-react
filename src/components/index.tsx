@@ -22,9 +22,9 @@ export default class Index extends React.Component<any, MasterState> {
   newExperience: any[] = [
     {
       name: "活力",
-      thresholds: [-300, -200, -100, 0, 100, 200, 500, 1000],
-      offset: 1,
-      magnifier: 1,
+      thresholds: [-3000, -2000, -1000, -750, -500, -350, -100, -50, 0, 50, 100, 150, 200, 300, 400, 500, 650, 800, 1000, 1500, 2000, 2500, 3000],
+      offset: 0.5,
+      magnifier: 10,
     }
   ];
 
@@ -33,7 +33,8 @@ export default class Index extends React.Component<any, MasterState> {
     {
       name: "彩票中特等概率",
       offset: 0.523,
-      currentProb: 50 
+      currentProb: 50 ,
+      loseMessage: "您没戏了！还不如资助下<%yibao>怡宝的儿！"
     }
   ];
 
@@ -87,7 +88,8 @@ export default class Index extends React.Component<any, MasterState> {
       probs.push({
         name: prob.name,
         offset: prob.offset || 0,
-        currentProb: prob.currentProb || 50 // <-- in percentage %
+        currentProb: prob.currentProb || 50, // <-- in percentage %
+        loseMessage: prob.loseMessage || `${prob.name}已经很低了`
       });
     }
 
@@ -107,6 +109,9 @@ export default class Index extends React.Component<any, MasterState> {
 
     for (let prob of nextProbs) {
       prob.currentProb *= Math.random() + prob.offset;
+      if (prob.currentProb > 100) {
+        prob.currentProb = 100;
+      }
     }
 
     return nextProbs;
@@ -121,7 +126,9 @@ export default class Index extends React.Component<any, MasterState> {
         thresholds: exp.thresholds,
         offset: exp.offset || 0,
         magnifier: exp.magnifier || 1,
-        currentLevel: 0, // don't need to provide since is auto generated
+        level: {
+          now: 0 // don't need to provide since is auto generated
+        },
         currentValue: exp.currentValue || 0 // <-- acts as iniitial value
       });
     }
@@ -143,7 +150,7 @@ export default class Index extends React.Component<any, MasterState> {
     for (let exp of nextExps) {
 
       // Calc current value
-      exp.currentValue += (exp.magnifier * this.generateGaussianRand() + exp.offset); // random walk with linear combination
+      exp.currentValue += Math.ceil(exp.magnifier * this.generateGaussianRand() + exp.offset); // random walk with linear combination
 
       // current level
       // e.g threshold [-100, -50, 0, 10, 100, 1000]
@@ -154,14 +161,22 @@ export default class Index extends React.Component<any, MasterState> {
         lv0Pos = exp.thresholds.length - 1;
       } 
 
+      
       // e.g threshold [-100, -50, 0, 10, 100, 1000]
       //                 ->0  ->1 ->2 ->3 ->4   ->5
       // say current value is 7, then it should belone to level 0; 11 should be lv 1; -129 is lv. -2
-      let ceilingPos = exp.thresholds.findIndex( ele => ele > exp.currentValue ) || exp.thresholds.length - 1; // <-- fallback
-      
-      exp.currentLevel = ceilingPos - lv0Pos;
+      let ceilingPos = exp.thresholds.findIndex( ele => ele > exp.currentValue )
 
-      console.log(ceilingPos, lv0Pos, exp.currentLevel);
+      
+
+      if (ceilingPos === -1) {
+        // this happens when current value is bigger than everyone in the threshold.
+        ceilingPos = exp.thresholds.length - 1;
+      }
+      
+      exp.level.lv0pos = lv0Pos;
+      exp.level.nextPos = ceilingPos;
+      exp.level.now = ceilingPos - lv0Pos;
 
     }
 

@@ -1,15 +1,21 @@
-export interface probability {
+interface probability {
   name: string,
   offset: number,
   currentProb: number // <-- in percentage %
+  loseMessage: string
 }
 
-export interface experience {
+interface experience {
   name: string,
   thresholds: number[],
   offset: number,
   magnifier: number,
-  currentLevel: number,
+  level: {
+    max?: number,
+    lv0pos?: number,
+    nextPos?: number
+    now: number
+  }
   currentValue: number
 }
 
