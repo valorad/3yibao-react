@@ -4,6 +4,9 @@ import "./dashboard.scss";
 
 import { MasterState } from "../interface/index.interface";
 
+// elements
+import ChartLine from "./charts/chartLine";
+
 export default class Dashboard extends React.Component<any, any> {
 
   // masterState: MasterState = this.props.masterState;
@@ -77,6 +80,7 @@ export default class Dashboard extends React.Component<any, any> {
       <section className="dashboard">
         { this.placeExps() }
         { this.placeProbs() }
+        <ChartLine />
       </section>
     );
   }
