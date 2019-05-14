@@ -25,7 +25,8 @@ export default class Index extends React.Component<any, MasterState> {
       
       level: {
         thresholds: [-3000, -2000, -1000, -750, -500, -350, -100, -50, 0, 50, 100, 150, 200, 300, 400, 500, 650, 800, 1000, 1500, 2000, 2500, 3000],
-        order: "asc"
+        order: "asc",
+        minValue: -1000
       },
       offset: 0.5,
       magnifier: 10,
@@ -35,7 +36,8 @@ export default class Index extends React.Component<any, MasterState> {
       
       level: {
         thresholds: [100, 0, -100, -200, -300, -400, -500],
-        order: "desc"
+        order: "desc",
+        minValue: -99999
       },
       offset: -2,
       magnifier: 2,
@@ -48,7 +50,8 @@ export default class Index extends React.Component<any, MasterState> {
       name: "彩票中特等概率",
       offset: 0.523,
       currentProb: 50 ,
-      loseMessage: "您没戏了！还不如资助下<%yibao>怡宝的儿！"
+      loseMessage: "您没戏了！还不如资助下<%yibao>怡宝的儿！",
+      minValue: 0.00001
     }
   ];
 
@@ -157,7 +160,8 @@ export default class Index extends React.Component<any, MasterState> {
         level: {
           thresholds: exp.level.thresholds,
           order: exp.level.order || "asc",
-          now: 0 // don't need to provide since is auto generated
+          now: 0, // don't need to provide since is auto generated
+          minValue: exp.level.minValue
         },
         currentValue: exp.currentValue || 0 // <-- acts as iniitial value
       });
@@ -242,8 +246,9 @@ export default class Index extends React.Component<any, MasterState> {
         exp.level.max = exp.level.thresholds.length - 1 - exp.level.lv0pos;
 
       }
-
     }
+
+    
 
     return nextExps;
 

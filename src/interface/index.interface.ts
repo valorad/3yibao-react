@@ -2,7 +2,8 @@ interface probability {
   name: string,
   offset: number,
   currentProb: number // <-- in percentage %
-  loseMessage: string
+  loseMessage: string,
+  minValue?: number // the min value to display in line chart
 }
 
 interface experience {
@@ -12,6 +13,7 @@ interface experience {
   magnifier: number,
   level: {
     thresholds: number[],
+    minValue?: number // the min value to display in line chart
     order: "asc" | "desc",
     max?: number,
     lv0pos?: number,

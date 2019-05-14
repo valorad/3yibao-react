@@ -6,122 +6,109 @@ import charts from "fusioncharts/fusioncharts.charts";
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import ReactFC from 'react-fusioncharts';
 
+import "./chartline.scss";
+
+import { lineChartConfig } from "../../interface/lineChartConfig.interface";
+
 ReactFC.fcRoot(fusioncharts, charts, FusionTheme);
 
-export default class Chartline extends React.Component {
+interface chartData {
+  label: string,
+  value: string
+}
 
-  dataSource = {
+interface chartdataSource {
+  chart: lineChartConfig,
+  data: chartData[],
+  maxLength: number
+}
+
+interface chartstate {
+  dataSource: chartdataSource
+}
+
+interface chartprop {
+  config: {}
+  nextValue: number,
+  minValue?: number
+}
+
+export default class Chartline extends React.Component<chartprop, chartstate> {
+
+  graphDisabled = false; // if ture: stop adding new data, and graph grey out
+  minValueToDisplay = 0;
+
+  dataSource: chartdataSource = {
     chart: {
-      caption: "Test Chart",
-      yaxisname: "points",
-      subcaption: "[test lala]",
+      caption: "Line Chart",
+      yaxisname: "unit",
+      subcaption: " ",
       numbersuffix: " ",
       rotatelabels: "1",
       setadaptiveymin: "1",
       drawAnchors: "0",
       theme: "fusion"
     },
-    data: [
-      {
-        label: "2005",
-        value: "89.45"
-      },
-      {
-        label: "2006",
-        value: "89.87"
-      },
-      {
-        label: "2007",
-        value: "89.64"
-      },
-      {
-        label: "2008",
-        value: "90.13"
-      },
-      {
-        label: "2009",
-        value: "90.67"
-      },
-      {
-        label: "2010",
-        value: "90.54"
-      },
-      {
-        label: "2011",
-        value: "90.75"
-      },
-      {
-        label: "2012",
-        value: "90.8"
-      },
-      {
-        label: "2013",
-        value: "91.16"
-      },
-      {
-        label: "2014",
-        value: "91.37"
-      },
-      {
-        label: "2015",
-        value: "91.66"
-      },
-      {
-        label: "2016",
-        value: "91.8"
-      }
-    ]
+    data: [    ],
+    maxLength: 100
   };
 
   state = {
-    data: this.dataSource
+    dataSource: this.dataSource
   }
 
-  getTable = () => {
+  componentDidUpdate(prevProps: chartprop) {
 
-  };
+    this.dataSource.chart = {
+      ...this.dataSource.chart,
+      ...prevProps.config
+    }
 
-  componentDidMount() {
+    this.minValueToDisplay = this.props.minValue || 0;
 
+    if ( prevProps.nextValue <= this.minValueToDisplay ) {
+      this.graphDisabled = true;
+    } else {
+      this.graphDisabled = false;
+      this.insertData(prevProps.nextValue.toString());
+    }
 
+    
+ 
   }
 
-  start = 2017;
 
-  addData = () => {
+  insertData = (nextValue: string) => {
 
-    this.setState((prev: any) => {
-      let prevData = prev.data.data;
-
-      prevData.push({
-        label: this.start.toString(),
-        value: (91.8).toString()
-      })
-
-      this.start++;
-
-      return {
-        ...prev,
-        data: {
-          data: prevData
-        }
-      }
+    this.dataSource.data.push({
+      label: " ",
+      value: nextValue
     })
+
+    if (this.dataSource.data.length > this.dataSource.maxLength) {
+      this.dataSource.data.shift();
+    }
     
   };
 
+
   render() {
+
     return (
-      <div className="linechart">
-        <button onClick={this.addData}>+++</button>
-        <ReactFC
-          type="line"
-          width="100%"
-          height="100%"
-          dataFormat="JSON"
-          dataSource={this.dataSource}
-        />
-      </div>
+      <section className="linechart">
+
+        <div className={`chart ${this.graphDisabled? "disabled": ""}`}>
+          <ReactFC
+            type="line"
+            width="100%"
+            height="100%"
+            dataFormat="JSON"
+            dataSource={this.state.dataSource}
+          />
+        </div>
+
+
+      </section>
     );
   }
 
