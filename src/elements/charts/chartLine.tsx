@@ -8,7 +8,7 @@ import ReactFC from 'react-fusioncharts';
 
 import "./chartline.scss";
 
-import { lineChartConfig } from "../../interface/lineChartConfig.interface";
+import { lineChartConfig } from "../../interface/chart.interface";
 
 ReactFC.fcRoot(fusioncharts, charts, FusionTheme);
 
@@ -35,7 +35,7 @@ interface chartprop {
 
 export default class Chartline extends React.Component<chartprop, chartstate> {
 
-  graphDisabled = false; // if ture: stop adding new data, and graph grey out
+  graphDisabled = false; // if true: stop adding new data, and graph grey out
   minValueToDisplay = 0;
 
   dataSource: chartdataSource = {
@@ -44,13 +44,28 @@ export default class Chartline extends React.Component<chartprop, chartstate> {
       yaxisname: "unit",
       subcaption: " ",
       numbersuffix: " ",
-      rotatelabels: "1",
-      setadaptiveymin: "1",
-      drawAnchors: "0",
+      rotatelabels: 1,
+      setadaptiveymin: 1,
+      drawAnchors: 0,
       theme: "fusion"
     },
     data: [    ],
     maxLength: 100
+  };
+
+
+
+  insertData = (nextValue: string) => {
+
+    this.dataSource.data.push({
+      label: " ",
+      value: nextValue
+    })
+
+    if (this.dataSource.data.length > this.dataSource.maxLength) {
+      this.dataSource.data.shift();
+    }
+    
   };
 
   state = {
@@ -72,24 +87,8 @@ export default class Chartline extends React.Component<chartprop, chartstate> {
       this.graphDisabled = false;
       this.insertData(prevProps.nextValue.toString());
     }
-
-    
  
   }
-
-
-  insertData = (nextValue: string) => {
-
-    this.dataSource.data.push({
-      label: " ",
-      value: nextValue
-    })
-
-    if (this.dataSource.data.length > this.dataSource.maxLength) {
-      this.dataSource.data.shift();
-    }
-    
-  };
 
 
   render() {

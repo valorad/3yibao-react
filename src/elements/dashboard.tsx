@@ -4,17 +4,24 @@ import "./dashboard.scss";
 
 // interfaces
 import { MasterState } from "../interface/index.interface";
-import { lineChartConfig } from '../interface/lineChartConfig.interface';
+import { lineChartConfig, gaugeConfig, gaugeColor } from '../interface/chart.interface';
 
 // elements
 import ChartLine from "./charts/chartLine";
-
+import ChartGauge from "./charts/chartgauge";
 
 interface lineChartCreationConfig {
   chart: lineChartConfig,
   nextValue: number,
   minValue?: number,
   maxLength?: number
+}
+
+interface gaugeCreationConfig {
+  chart: gaugeConfig,
+  nextValue: number,
+  minValue?: number
+  ranges?: gaugeColor[]
 }
 
 export default class Dashboard extends React.Component<any, any> {
@@ -49,12 +56,16 @@ export default class Dashboard extends React.Component<any, any> {
         }
 
       // chart config
-      let chartConfig: lineChartConfig = {
-        caption: exp.name,
-        yaxisname: "点数"
+      let chartConfig: any = {
+        chart: {
+          type: "line",
+          caption: exp.name,
+          subcaption: `当前等级: ${exp.level.now}`,
+          yaxisname: "点数"
+        },
+        nextValue: exp.currentValue,
+        minValue: exp.chart.minValue
       }
-
-      // console.log(exp.level.minValue);
 
       return (
 
@@ -62,11 +73,7 @@ export default class Dashboard extends React.Component<any, any> {
           <p>{exp.name}：</p>
           <p>当前值：{exp.currentValue} / {nextThreshold}</p>
           <p>当前等级: {exp.level.now}</p>
-          {this.createLineChart({
-            chart: chartConfig,
-            nextValue: exp.currentValue,
-            minValue: exp.level.minValue
-          })}
+          {this.createChart(chartConfig)}
         </div>
         
       );
@@ -80,11 +87,26 @@ export default class Dashboard extends React.Component<any, any> {
     let probs = this.props.masterState.probabilities.map((prob: MasterState["probabilities"][0]) => {
       
       let loseMessage = prob.loseMessage.replace(/<%yibao>/g, this.props.masterState.yibao);
-      
+
+      let chartConfig = {
+        chart: {
+          type: prob.chart.type,
+          name: prob.name,
+          lowerLimit: 0,
+          upperLimit: 100,
+          numberSuffix: " %",
+          subcaption: prob.currentProb > prob.chart.minValue ? "当前值：" + prob.currentProb + " % ": loseMessage,
+          yaxisname: "概率 (%)",
+        },
+        nextValue: prob.currentProb,
+        minValue: prob.chart.minValue
+      };
+
       return (
 
         <div key={prob.name}>
           <p>{prob.name}：{prob.currentProb > 0.00001 ? prob.currentProb + " % ": loseMessage}</p>
+          {this.createChart(chartConfig)}
         </div>
         
       );
@@ -98,18 +120,50 @@ export default class Dashboard extends React.Component<any, any> {
     this.setState(this.props.masterState);
   }
 
-  placeLineCharts = () => {
+  // placeLineCharts = () => {
 
-    let lineCharts = [];
-    let config: any = {};
+  //   let lineCharts = [];
+  //   let config: any = {};
 
-    for (let prob of this.props.masterState.probabilities) {
-      config.caption = prob.name;
-      config.yaxisname = "概率(%)";
-      lineCharts.push(        <ChartLine key={prob.name} config={config} nextValue={prob.currentProb} />      );
+  //   for (let prob of this.props.masterState.probabilities) {
+  //     config.caption = prob.name;
+  //     config.yaxisname = "概率(%)";
+  //     lineCharts.push(        <ChartLine key={prob.name} config={config} nextValue={prob.currentProb} />      );
+  //   }
+
+  //   return lineCharts;
+  // };
+
+  createChart = (inputConfig: any) => {
+    let config: any = {
+      chart: {},
+      nextValue: 0
+    };
+    switch (inputConfig.chart.type) {
+      case "gauge":
+        // config is of type "gaugeCreationConfig"
+        config.chart = {
+          caption: inputConfig.chart.name,
+          subcaption: inputConfig.chart.subcaption,
+          lowerLimit: inputConfig.chart.lowerLimit,
+          upperLimit: inputConfig.chart.upperLimit,
+          numberSuffix: inputConfig.chart.numberSuffix
+        };
+        config.nextValue = inputConfig.nextValue;
+        config.ranges = inputConfig.chart.colors;
+        config.minValue = inputConfig.minValue;
+        return this.createGauge(config);
+      default: 
+        // by default it's lineChart
+        config.chart = {
+          caption: inputConfig.chart.caption,
+          subcaption: inputConfig.chart.subcaption,
+          yaxisname: inputConfig.chart.yaxisname
+        };
+        config.nextValue = inputConfig.nextValue;
+        config.minValue = inputConfig.minValue;
+        return this.createLineChart(config);
     }
-
-    return lineCharts;
   };
 
   createLineChart = (config: lineChartCreationConfig) => {
@@ -119,15 +173,16 @@ export default class Dashboard extends React.Component<any, any> {
     // console.log(config.minValue);
     return ( <ChartLine key={config.chart.caption} config={config.chart} nextValue={config.nextValue} minValue={config.minValue} /> );
   };
+
+  createGauge = (config: gaugeCreationConfig) => {
+    return ( <ChartGauge key={config.chart.caption} config={config.chart} nextValue={config.nextValue} minValue={config.minValue} colors={config.ranges} /> );
+  };
   
   render() {
     return (
       <section className="dashboard">
         { this.placeExps() }
         { this.placeProbs() }
-        <hr/>
-        {/* { this.placeLineCharts() } */}
-        
       </section>
     );
   }

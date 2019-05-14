@@ -3,7 +3,11 @@ interface probability {
   offset: number,
   currentProb: number // <-- in percentage %
   loseMessage: string,
-  minValue?: number // the min value to display in line chart
+  chart: {
+    minValue: number, // the min value to display in line chart
+    type: string
+  }
+  
 }
 
 interface experience {
@@ -13,14 +17,17 @@ interface experience {
   magnifier: number,
   level: {
     thresholds: number[],
-    minValue?: number // the min value to display in line chart
     order: "asc" | "desc",
     max?: number,
     lv0pos?: number,
     nextPos?: number
     now: number
   }
-  currentValue: number
+  currentValue: number,
+  chart: {
+    minValue: number, // the min value to display in line chart
+    type: string
+  }
 }
 
 export interface MasterState {

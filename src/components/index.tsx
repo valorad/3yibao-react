@@ -25,22 +25,28 @@ export default class Index extends React.Component<any, MasterState> {
       
       level: {
         thresholds: [-3000, -2000, -1000, -750, -500, -350, -100, -50, 0, 50, 100, 150, 200, 300, 400, 500, 650, 800, 1000, 1500, 2000, 2500, 3000],
-        order: "asc",
-        minValue: -1000
+        order: "asc"
       },
-      offset: 0.5,
+      offset: -0.05,
       magnifier: 10,
+      chart: {
+        minValue: -3000,
+        type: "line"
+      }
     },
     {
       name: "负能量",
       
       level: {
         thresholds: [100, 0, -100, -200, -300, -400, -500],
-        order: "desc",
-        minValue: -99999
+        order: "desc"
       },
       offset: -2,
       magnifier: 2,
+      chart: {
+        minValue: -99999,
+        type: "line"
+      }
     }
   ];
 
@@ -48,10 +54,14 @@ export default class Index extends React.Component<any, MasterState> {
   newProbabilities: any[] = [
     {
       name: "彩票中特等概率",
-      offset: 0.523,
+      offset: 0.323,
       currentProb: 50 ,
       loseMessage: "您没戏了！还不如资助下<%yibao>怡宝的儿！",
-      minValue: 0.00001
+      chart: {
+        minValue: 0.001,
+        type: "gauge"
+      }
+      
     }
   ];
 
@@ -106,7 +116,11 @@ export default class Index extends React.Component<any, MasterState> {
         name: prob.name,
         offset: prob.offset || 0,
         currentProb: prob.currentProb || 50, // <-- in percentage %
-        loseMessage: prob.loseMessage || `${prob.name}已经很低了`
+        loseMessage: prob.loseMessage || `${prob.name}已经很低了`,
+        chart: {
+          minValue: prob.chart.minValue || 0.00001,
+          type: prob.chart.type || "line"
+        }
       });
     }
 
@@ -153,6 +167,10 @@ export default class Index extends React.Component<any, MasterState> {
 
       exp.level.thresholds.sort(sortMethod);
 
+      if (!exp.chart) {
+        exp.chart = {}
+      }
+
       exps.push({
         name: exp.name,
         offset: exp.offset || 0,
@@ -160,10 +178,13 @@ export default class Index extends React.Component<any, MasterState> {
         level: {
           thresholds: exp.level.thresholds,
           order: exp.level.order || "asc",
-          now: 0, // don't need to provide since is auto generated
-          minValue: exp.level.minValue
+          now: 0 // don't need to provide since is auto generated
         },
-        currentValue: exp.currentValue || 0 // <-- acts as iniitial value
+        currentValue: exp.currentValue || 0, // <-- acts as iniitial value
+        chart: {
+          minValue: exp.chart.minValue || 0,
+          type: exp.chart.type || "line"
+        }
       });
     }
 
