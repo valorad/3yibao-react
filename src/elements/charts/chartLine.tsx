@@ -99,8 +99,8 @@ export default class Chartline extends React.Component<chartprop, chartstate> {
         <div className={`chart ${this.graphDisabled? "disabled": ""}`}>
           <ReactFC
             type="line"
-            width="100%"
-            height="100%"
+            // width="100%"
+            // height="100%"
             dataFormat="JSON"
             dataSource={this.state.dataSource}
           />

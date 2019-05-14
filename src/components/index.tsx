@@ -62,6 +62,17 @@ export default class Index extends React.Component<any, MasterState> {
         type: "gauge"
       }
       
+    },
+    {
+      name: "减肥成功率",
+      offset: 0.518,
+      currentProb: 30 ,
+      loseMessage: "<%yibao>怡宝已经放弃减肥了",
+      chart: {
+        minValue: 0.001,
+        type: "gauge"
+      }
+      
     }
   ];
 

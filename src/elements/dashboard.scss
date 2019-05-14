@@ -1,0 +1,48 @@
+section.dashboard {
+
+  > main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1em auto;
+    max-width: 1400px;
+  }
+
+  .chartHolder {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1em auto;
+  }
+
+  .chartTitle {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    margin: 0 4em;
+    .flexSpacer {
+      min-width: 10em;
+    }
+    p {
+      margin: 0.5em 1em;
+      min-width: 10em;
+    }
+  }
+
+
+  @media only screen and (min-width: 900px) {
+    .chartHolder {
+      width: 50%;
+    }
+    .chartTitle {
+      .flexSpacer {
+        min-width: unset;
+      }
+    }
+  }
+
+
+}
+

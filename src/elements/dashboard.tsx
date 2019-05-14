@@ -59,9 +59,9 @@ export default class Dashboard extends React.Component<any, any> {
       let chartConfig: any = {
         chart: {
           type: "line",
-          caption: exp.name,
-          subcaption: `当前等级: ${exp.level.now}`,
-          yaxisname: "点数"
+          // caption: exp.name,
+          // subcaption: `当前等级: ${exp.level.now}`,
+          // yaxisname: "点数"
         },
         nextValue: exp.currentValue,
         minValue: exp.chart.minValue
@@ -69,10 +69,14 @@ export default class Dashboard extends React.Component<any, any> {
 
       return (
 
-        <div key={exp.name}>
-          <p>{exp.name}：</p>
-          <p>当前值：{exp.currentValue} / {nextThreshold}</p>
-          <p>当前等级: {exp.level.now}</p>
+        <div className="chartHolder exp" key={exp.name}>
+          <div className="chartTitle">
+            <h3>{exp.name}</h3>
+            <div className="flexSpacer"></div>
+            <p>当前值：{exp.currentValue} / {nextThreshold}</p>
+            <p>当前等级: {exp.level.now}</p>
+          </div>
+
           {this.createChart(chartConfig)}
         </div>
         
@@ -95,8 +99,10 @@ export default class Dashboard extends React.Component<any, any> {
           lowerLimit: 0,
           upperLimit: 100,
           numberSuffix: " %",
-          subcaption: prob.currentProb > prob.chart.minValue ? "当前值：" + prob.currentProb + " % ": loseMessage,
-          yaxisname: "概率 (%)",
+          caption: "",
+          subcaption: "",
+          // subcaption: prob.currentProb > prob.chart.minValue ? "当前值：" + prob.currentProb + " % ": loseMessage,
+          // yaxisname: "概率 (%)",
         },
         nextValue: prob.currentProb,
         minValue: prob.chart.minValue
@@ -104,8 +110,14 @@ export default class Dashboard extends React.Component<any, any> {
 
       return (
 
-        <div key={prob.name}>
-          <p>{prob.name}：{prob.currentProb > 0.00001 ? prob.currentProb + " % ": loseMessage}</p>
+        <div className="chartHolder prob" key={prob.name}>
+
+          <div className="chartTitle">
+            <h3>{prob.name}</h3>
+            <div className="flexSpacer"></div>
+            <p>{prob.currentProb > prob.chart.minValue ? prob.currentProb.toFixed(2) + " % ": loseMessage}</p>
+          </div>
+
           {this.createChart(chartConfig)}
         </div>
         
@@ -120,20 +132,6 @@ export default class Dashboard extends React.Component<any, any> {
     this.setState(this.props.masterState);
   }
 
-  // placeLineCharts = () => {
-
-  //   let lineCharts = [];
-  //   let config: any = {};
-
-  //   for (let prob of this.props.masterState.probabilities) {
-  //     config.caption = prob.name;
-  //     config.yaxisname = "概率(%)";
-  //     lineCharts.push(        <ChartLine key={prob.name} config={config} nextValue={prob.currentProb} />      );
-  //   }
-
-  //   return lineCharts;
-  // };
-
   createChart = (inputConfig: any) => {
     let config: any = {
       chart: {},
@@ -143,7 +141,7 @@ export default class Dashboard extends React.Component<any, any> {
       case "gauge":
         // config is of type "gaugeCreationConfig"
         config.chart = {
-          caption: inputConfig.chart.name,
+          caption: inputConfig.chart.caption,
           subcaption: inputConfig.chart.subcaption,
           lowerLimit: inputConfig.chart.lowerLimit,
           upperLimit: inputConfig.chart.upperLimit,
@@ -167,10 +165,6 @@ export default class Dashboard extends React.Component<any, any> {
   };
 
   createLineChart = (config: lineChartCreationConfig) => {
-
-    // config.caption = prob.name;
-    // config.yaxisname = "概率(%)";
-    // console.log(config.minValue);
     return ( <ChartLine key={config.chart.caption} config={config.chart} nextValue={config.nextValue} minValue={config.minValue} /> );
   };
 
@@ -181,8 +175,10 @@ export default class Dashboard extends React.Component<any, any> {
   render() {
     return (
       <section className="dashboard">
+        <main>
         { this.placeExps() }
         { this.placeProbs() }
+        </main>
       </section>
     );
   }
