@@ -6,6 +6,7 @@ import { MasterState } from "../interface/index.interface";
 // elements
 import Billboard from "../elements/billboard";
 import Dashboard from "../elements/dashboard";
+import Console from "../elements/console";
 import Boom from "../elements/boom";
 
 // import Storm from "../elements/storm";
@@ -75,6 +76,8 @@ export default class Index extends React.Component<any, MasterState> {
       
     }
   ];
+
+  consoleOpened = false;
 
 
   generateGaussianRand = () => {
@@ -297,9 +300,17 @@ export default class Index extends React.Component<any, MasterState> {
     
   }
 
+  toggleConsole = (e: React.KeyboardEvent) => {
+    if (e.key === ("`" || "~")) {
+      this.consoleOpened = !this.consoleOpened;
+      console.log("toggleConsole");
+    }
+  };
+
   render() {
+
     return (
-      <section className="index">
+      <section className="index" onKeyUp={this.toggleConsole} tabIndex={0}>
         <header>
           <Billboard yibao={this.state.yibao} />
         </header>
@@ -307,6 +318,7 @@ export default class Index extends React.Component<any, MasterState> {
           {/* <Boom /> */}
           <Dashboard masterState={this.state} />
         </main>
+        <Console open={this.consoleOpened} />
       </section>
     );
   }
