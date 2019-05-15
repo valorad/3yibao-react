@@ -13,6 +13,11 @@ import Boom from "../elements/boom";
 
 export default class Index extends React.Component<any, MasterState> {
 
+  newLog = {
+    type: "",
+    log: "Begin log >>>>>"
+  }
+
   state = {
     yibao: 3,
     experiences: [    ],
@@ -33,7 +38,18 @@ export default class Index extends React.Component<any, MasterState> {
       chart: {
         minValue: -3000,
         type: "line"
+      },
+      message: {
+        upgrade: {
+          chart: "",  // <- display beside chart
+          notification: "恭喜<%yibao>怡宝活力升级！"  // <- to notification and console
+        },
+        downgrade: {
+          chart: "",  // <- display beside chart
+          notification: "<%yibao>怡宝失去了1级活力"  // <- to notification and console
+        }
       }
+
     },
     {
       name: "负能量",
@@ -47,6 +63,16 @@ export default class Index extends React.Component<any, MasterState> {
       chart: {
         minValue: -99999,
         type: "line"
+      },
+      message: {
+        upgrade: {
+          chart: "",  // <- display beside chart
+          notification: "<%yibao>怡宝的负能量爆炸了！"  // <- to notification and console
+        },
+        downgrade: {
+          chart: "",  // <- display beside chart
+          notification: "<%yibao>怡宝正能量成功上线"  // <- to notification and console
+        }
       }
     }
   ];
@@ -57,10 +83,19 @@ export default class Index extends React.Component<any, MasterState> {
       name: "彩票中特等概率",
       offset: 0.323,
       currentProb: 50 ,
-      loseMessage: "您没戏了！还不如资助下<%yibao>怡宝的儿！",
       chart: {
         minValue: 0.001,
         type: "gauge"
+      },
+      message: {
+        peak: {
+          chart: "",  // <- display beside chart
+          notification: ""  // <- to notification and console
+        },
+        valley: {
+          chart: "您没戏了！还不如资助下<%yibao>怡宝的儿！",  // <- display beside chart
+          notification: "<%yibao>怡宝的彩票已经打水漂了"  // <- to notification and console
+        }
       }
       
     },
@@ -68,10 +103,19 @@ export default class Index extends React.Component<any, MasterState> {
       name: "减肥成功率",
       offset: 0.518,
       currentProb: 30 ,
-      loseMessage: "<%yibao>怡宝已经放弃减肥了",
       chart: {
         minValue: 0.001,
         type: "gauge"
+      },
+      message: {
+        peak: {
+          chart: "",  // <- display beside chart
+          notification: ""  // <- to notification and console
+        },
+        valley: {
+          chart: "<%yibao>怡宝已经放弃减肥了",  // <- display beside chart
+          notification: "<%yibao>怡宝已经放弃减肥了"  // <- to notification and console
+        }
       }
       
     }
@@ -130,10 +174,19 @@ export default class Index extends React.Component<any, MasterState> {
         name: prob.name,
         offset: prob.offset || 0,
         currentProb: prob.currentProb || 50, // <-- in percentage %
-        loseMessage: prob.loseMessage || `${prob.name}已经很低了`,
         chart: {
           minValue: prob.chart.minValue || 0.00001,
           type: prob.chart.type || "line"
+        },
+        message: {
+          peak: {
+            chart: prob.message.peak.chart || `高到爆表！`,  // <- display beside chart
+            notification: prob.message.peak.notification || `${prob.name}达到巅峰！`  // <- to notification and console
+          },
+          valley: {
+            chart: prob.message.valley.chart || `可以忽略不计`,  // <- display beside chart
+            notification: prob.message.valley.notification || `${prob.name}已经很低了`  // <- to notification and console
+          }
         }
       });
     }
@@ -153,9 +206,17 @@ export default class Index extends React.Component<any, MasterState> {
     let nextProbs = prevProbs;
 
     for (let prob of nextProbs) {
+
+      let prevProb = prob.currentProb;
+
       prob.currentProb *= Math.random() + prob.offset;
       if (prob.currentProb > 100) {
         prob.currentProb = 100;
+      }
+      if (!(prevProb > 95) && prob.currentProb > 95) {
+        this.logToConsole(prob.message.peak.notification, "success");
+      } else if (!(prevProb < prob.chart.minValue) && prob.currentProb < prob.chart.minValue){
+        this.logToConsole(prob.message.valley.notification, "error");
       }
     }
 
@@ -198,6 +259,16 @@ export default class Index extends React.Component<any, MasterState> {
         chart: {
           minValue: exp.chart.minValue || 0,
           type: exp.chart.type || "line"
+        },
+        message: {
+          upgrade: {
+            chart: exp.message.upgrade.chart || `恭喜您的${exp.name}升级了！`,  // <- display beside chart
+            notification: exp.message.upgrade.notification || `${exp.name}升级了`  // <- to notification and console
+          },
+          downgrade: {
+            chart: exp.message.downgrade.chart || `哎呀您的${exp.name}降级了`,  // <- display beside chart
+            notification: exp.message.downgrade.notification || `${exp.name}降级了`  // <- to notification and console
+          }
         }
       });
     }
@@ -217,6 +288,8 @@ export default class Index extends React.Component<any, MasterState> {
     let nextExps = prevExps;
 
     for (let exp of nextExps) {
+
+      let prevLevel = exp.level.now;
 
       // Calc current value
       exp.currentValue += Math.ceil(exp.magnifier * this.generateGaussianRand() + exp.offset); // random walk with linear combination
@@ -253,6 +326,12 @@ export default class Index extends React.Component<any, MasterState> {
         exp.level.nextPos = ceilingPos;
         exp.level.now = lv0Pos - ceilingPos + 1;
         exp.level.max = exp.level.lv0pos - (exp.level.thresholds.length - 1);
+
+        if (exp.level.now < prevLevel) {
+          this.logToConsole(exp.message.upgrade.notification, "error");
+        } else if (exp.level.now > prevLevel) {
+          this.logToConsole(exp.message.downgrade.notification, "success");
+        }
         
 
       } else {
@@ -280,13 +359,37 @@ export default class Index extends React.Component<any, MasterState> {
         exp.level.now = ceilingPos - lv0Pos;
         exp.level.max = exp.level.thresholds.length - 1 - exp.level.lv0pos;
 
+
+        if (exp.level.now > prevLevel) {
+          this.logToConsole(exp.message.upgrade.notification, "success");
+        } else if (exp.level.now < prevLevel) {
+          this.logToConsole(exp.message.downgrade.notification, "error");
+        }
+
       }
-    }
+
+
+    } // <-- for
 
     
 
     return nextExps;
 
+  };
+
+  toggleConsole = (e: React.KeyboardEvent) => {
+    if (e.key === ("`" || "~")) {
+      this.consoleOpened = !this.consoleOpened;
+      console.log("toggleConsole");
+    }
+  };
+
+  logToConsole = (log: string, type?: string) => {
+    // type: error, success
+    this.newLog = {
+      type: type || "",
+      log
+    }
   };
 
   componentDidMount() {
@@ -300,12 +403,7 @@ export default class Index extends React.Component<any, MasterState> {
     
   }
 
-  toggleConsole = (e: React.KeyboardEvent) => {
-    if (e.key === ("`" || "~")) {
-      this.consoleOpened = !this.consoleOpened;
-      console.log("toggleConsole");
-    }
-  };
+
 
   render() {
 
@@ -318,7 +416,7 @@ export default class Index extends React.Component<any, MasterState> {
           {/* <Boom /> */}
           <Dashboard masterState={this.state} />
         </main>
-        <Console open={this.consoleOpened} />
+        <Console open={this.consoleOpened} log={this.newLog} yibao={this.state.yibao} />
       </section>
     );
   }

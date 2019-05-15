@@ -6,11 +6,36 @@ export default class Console extends React.Component<any> {
 
   consoleOpened = false;
 
+  logs: any[] = [];
+
+  logIndex = -1;
+
+  placeLogs = () => {
+    let lis = this.logs.map((log)=>{
+      this.logIndex++;
+      return (< li key={this.logIndex} className={log.type}>[{log.time}] {log.parselog} </li> )
+    });
+
+    return lis;
+  };
+
   componentDidUpdate(prevProps: any) {
-    this.consoleOpened =  this.props.open
+    this.consoleOpened =  prevProps.open;
+    if (prevProps.log !== this.props.log) {
+
+      let now = new Date();
+      this.props.log.time = now.toLocaleTimeString();
+      this.props.log.parselog = this.props.log.log.replace(/<%yibao>/g, this.props.yibao);
+      this.logs.push(this.props.log)
+
+      this.logIndex++;
+
+    }
+
   }
 
   state = {
+    logs: this.logs,
     consoleOpened: false
   }
 
@@ -21,18 +46,7 @@ export default class Console extends React.Component<any> {
           <ul>
             <li>Welcome to 3yibao's console</li>
             <li>>>> Begin log</li>
-            <li className="success">[20190514190405] 恭喜3怡宝活力升级 </li>
-            <li className="error">[20190514190407] 3怡宝的彩票已经没戏了 </li>
-            <li className="success">[20190514190405] 恭喜3怡宝活力升级 </li>
-            <li className="error">[20190514190407] 3怡宝的彩票已经没戏了 </li>
-            <li className="success">[20190514190405] 恭喜3怡宝活力升级 </li>
-            <li className="error">[20190514190407] 3怡宝的彩票已经没戏了 </li>
-            <li className="success">[20190514190405] 恭喜3怡宝活力升级 </li>
-            <li className="error">[20190514190407] 3怡宝的彩票已经没戏了 </li>
-            <li className="success">[20190514190405] 恭喜3怡宝活力升级 </li>
-            <li className="error">[20190514190407] 3怡宝的彩票已经没戏了 </li>
-            <li className="success">[20190514190405] 恭喜3怡宝活力升级 </li>
-            <li className="error">[20190514190407] 3怡宝的彩票已经没戏了 </li>
+            {this.placeLogs()}
           </ul>
           <footer className="action">
             <span>></span>

@@ -89,8 +89,24 @@ export default class Dashboard extends React.Component<any, any> {
   placeProbs = () => {
 
     let probs = this.props.masterState.probabilities.map((prob: MasterState["probabilities"][0]) => {
-      
-      let loseMessage = prob.loseMessage.replace(/<%yibao>/g, this.props.masterState.yibao);
+
+      let chartMessage = {
+        peak: prob.message.peak.chart,
+        valley: prob.message.valley.chart
+      }
+
+      let probToDisplay = "";
+      if (prob.currentProb > prob.chart.minValue) {
+
+        if (prob.currentProb > 95) {
+          probToDisplay = chartMessage.peak.replace(/<%yibao>/g, this.props.masterState.yibao);
+        } else {
+          probToDisplay = prob.currentProb.toFixed(2) + " % ";
+        }
+        
+      } else {
+        probToDisplay = chartMessage.valley.replace(/<%yibao>/g, this.props.masterState.yibao);
+      }
 
       let chartConfig = {
         chart: {
@@ -115,7 +131,7 @@ export default class Dashboard extends React.Component<any, any> {
           <div className="chartTitle">
             <h3>{prob.name}</h3>
             <div className="flexSpacer"></div>
-            <p>{prob.currentProb > prob.chart.minValue ? prob.currentProb.toFixed(2) + " % ": loseMessage}</p>
+            <p>{probToDisplay}</p>
           </div>
 
           {this.createChart(chartConfig)}
