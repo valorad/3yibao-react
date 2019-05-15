@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 // interfaces
 import { MasterState } from "../interface/index.interface";
@@ -8,6 +9,8 @@ import Billboard from "../elements/billboard";
 import Dashboard from "../elements/dashboard";
 import Console from "../elements/console";
 import Boom from "../elements/boom";
+
+import "./index.scss";
 
 // import Storm from "../elements/storm";
 
@@ -380,8 +383,11 @@ export default class Index extends React.Component<any, MasterState> {
   toggleConsole = (e: React.KeyboardEvent) => {
     if (e.key === ("`" || "~")) {
       this.consoleOpened = !this.consoleOpened;
-      console.log("toggleConsole");
     }
+  };
+
+  toggleConsoleClick = (e: React.MouseEvent) => {
+    this.consoleOpened = !this.consoleOpened;
   };
 
   logToConsole = (log: string, type?: string) => {
@@ -403,20 +409,22 @@ export default class Index extends React.Component<any, MasterState> {
     
   }
 
-
+  notify = () => toast.success("sss");
 
   render() {
 
     return (
       <section className="index" onKeyUp={this.toggleConsole} tabIndex={0}>
-        <header>
+        <header onClick={this.toggleConsoleClick}>
           <Billboard yibao={this.state.yibao} />
         </header>
         <main>
+          <h2>提示：按下"~"键或点击上方“恭喜{this.state.yibao}怡宝”打开控制台查看历史记录</h2>
           {/* <Boom /> */}
           <Dashboard masterState={this.state} />
         </main>
         <Console open={this.consoleOpened} log={this.newLog} yibao={this.state.yibao} />
+        <button onClick={this.notify}>Notify !</button>
       </section>
     );
   }

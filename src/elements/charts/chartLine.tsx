@@ -50,7 +50,7 @@ export default class Chartline extends React.Component<chartprop, chartstate> {
       theme: "fusion"
     },
     data: [    ],
-    maxLength: 50
+    maxLength: 30
   };
 
 
