@@ -293,7 +293,7 @@ export default class Index extends React.Component<any, MasterState> {
     
     setInterval(() => {
       this.calcNext();
-    }, 100);
+    }, 200);
     
   }
 
