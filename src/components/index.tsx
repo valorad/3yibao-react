@@ -1,5 +1,4 @@
 import React from 'react';
-import { toast } from 'react-toastify';
 
 // interfaces
 import { MasterState } from "../interface/index.interface";
@@ -8,6 +7,7 @@ import { MasterState } from "../interface/index.interface";
 import Billboard from "../elements/billboard";
 import Dashboard from "../elements/dashboard";
 import Console from "../elements/console";
+import Notification from "../elements/notification";
 import Boom from "../elements/boom";
 
 import "./index.scss";
@@ -19,6 +19,14 @@ export default class Index extends React.Component<any, MasterState> {
   newLog = {
     type: "",
     log: "Begin log >>>>>"
+  }
+
+  nextMessageId = 0;
+
+  newMessage = {
+    id: 0,
+    content: "",
+    type: ""
   }
 
   state = {
@@ -84,7 +92,7 @@ export default class Index extends React.Component<any, MasterState> {
   newProbabilities: any[] = [
     {
       name: "彩票中特等概率",
-      offset: 0.323,
+      offset: 0.523,
       currentProb: 50 ,
       chart: {
         minValue: 0.001,
@@ -125,6 +133,7 @@ export default class Index extends React.Component<any, MasterState> {
   ];
 
   consoleOpened = false;
+  
 
 
   generateGaussianRand = () => {
@@ -218,8 +227,11 @@ export default class Index extends React.Component<any, MasterState> {
       }
       if (!(prevProb > 95) && prob.currentProb > 95) {
         this.logToConsole(prob.message.peak.notification, "success");
+        this.notify(prob.message.peak.notification, "success");
+
       } else if (!(prevProb < prob.chart.minValue) && prob.currentProb < prob.chart.minValue){
         this.logToConsole(prob.message.valley.notification, "error");
+        this.notify(prob.message.valley.notification, "error");
       }
     }
 
@@ -332,8 +344,10 @@ export default class Index extends React.Component<any, MasterState> {
 
         if (exp.level.now < prevLevel) {
           this.logToConsole(exp.message.upgrade.notification, "error");
+          this.notify(exp.message.upgrade.notification, "error");
         } else if (exp.level.now > prevLevel) {
           this.logToConsole(exp.message.downgrade.notification, "success");
+          this.notify(exp.message.downgrade.notification, "success");
         }
         
 
@@ -365,8 +379,10 @@ export default class Index extends React.Component<any, MasterState> {
 
         if (exp.level.now > prevLevel) {
           this.logToConsole(exp.message.upgrade.notification, "success");
+          this.notify(exp.message.upgrade.notification, "success");
         } else if (exp.level.now < prevLevel) {
           this.logToConsole(exp.message.downgrade.notification, "error");
+          this.notify(exp.message.downgrade.notification, "error");
         }
 
       }
@@ -409,7 +425,14 @@ export default class Index extends React.Component<any, MasterState> {
     
   }
 
-  notify = () => toast.success("sss");
+  notify = (content: string, type: string) => {
+    this.nextMessageId++;
+    this.newMessage = {
+      id: this.nextMessageId,
+      content: content,
+      type: type
+    }
+  };
 
   render() {
 
@@ -424,7 +447,7 @@ export default class Index extends React.Component<any, MasterState> {
           <Dashboard masterState={this.state} />
         </main>
         <Console open={this.consoleOpened} log={this.newLog} yibao={this.state.yibao} />
-        <button onClick={this.notify}>Notify !</button>
+        <Notification nextMessage={this.newMessage} yibao={this.state.yibao} />
       </section>
     );
   }
