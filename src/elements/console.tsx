@@ -10,6 +10,17 @@ export default class Console extends React.Component<any> {
 
   logIndex = -1;
 
+  listHolder: HTMLMainElement | null = null;
+
+  scrollToBottom = () => {
+    if (this.listHolder) {
+      const scrollHeight = this.listHolder.scrollHeight;
+      const height = this.listHolder.clientHeight;
+      const maxScrollTop = scrollHeight - height;
+      this.listHolder.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
+  };
+
   placeLogs = () => {
     let lis = this.logs.map((log)=>{
       this.logIndex++;
@@ -32,6 +43,8 @@ export default class Console extends React.Component<any> {
 
     }
 
+    this.scrollToBottom();
+
   }
 
   state = {
@@ -42,7 +55,12 @@ export default class Console extends React.Component<any> {
   render() {
     return (
       <section className="console">
-        <main className={`console ${this.consoleOpened? "opened": ""}`}>
+        <main
+         className={`console ${this.consoleOpened? "opened": ""}`}
+         ref={(main) => {
+          this.listHolder = main;
+         }}
+         >
           <ul>
             <li>Welcome to 3yibao's console</li>
             <li>>>> Begin log</li>
