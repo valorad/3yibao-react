@@ -9,6 +9,13 @@ import { lineChartConfig, gaugeConfig, gaugeColor } from '../interface/chart.int
 // elements
 import ChartLine from "./charts/chartLine";
 import ChartGauge from "./charts/chartgauge";
+import Boom from "./boom";
+
+interface animState {
+  name: string,
+  upperAnimOn: boolean,
+  bottomAnimOn: boolean
+}
 
 interface lineChartCreationConfig {
   chart: lineChartConfig,
@@ -26,7 +33,9 @@ interface gaugeCreationConfig {
 
 export default class Dashboard extends React.Component<any, any> {
 
-  // masterState: MasterState = this.props.masterState;
+  animationStates: animState[] = [];
+  animationLoaded = false;
+  animationLoadRetryTime = 0;
 
   placeExps = () => {
     let exps = this.props.masterState.experiences.map((exp: MasterState["experiences"][0]) => {
@@ -58,13 +67,19 @@ export default class Dashboard extends React.Component<any, any> {
       // chart config
       let chartConfig: any = {
         chart: {
-          type: "line",
-          // caption: exp.name,
-          // subcaption: `当前等级: ${exp.level.now}`,
-          // yaxisname: "点数"
+          type: "line"
         },
         nextValue: exp.currentValue,
         minValue: exp.chart.minValue
+      }
+
+      // animstate configs
+      let animState = this.animationStates.find((ams) => {return ams.name === exp.name});
+
+      if (animState) {
+        if (exp.state === "upgrade") {
+          this.showBoom(animState);
+        }
       }
 
       return (
@@ -78,12 +93,34 @@ export default class Dashboard extends React.Component<any, any> {
           </div>
 
           {this.createChart(chartConfig)}
+
+          {
+            animState && animState.upperAnimOn &&
+            <div className="stateAnim">
+              <Boom />
+            </div>
+          }
         </div>
         
       );
     });
 
     return exps;
+  };
+
+  boomming = () => {
+    return new Promise((resolve) => {
+      setTimeout(
+        () => {resolve("done")},
+        500
+      )
+    })
+  };
+
+  showBoom = async (animState: animState) => {
+    animState.upperAnimOn = true;
+    await this.boomming();
+    animState.upperAnimOn = false;
   };
 
   placeProbs = () => {
@@ -124,6 +161,15 @@ export default class Dashboard extends React.Component<any, any> {
         minValue: prob.chart.minValue
       };
 
+      // animstate configs
+      let animState = this.animationStates.find((ams) => {return ams.name === prob.name});
+
+      if (animState) {
+        if (prob.state === "peak") {
+          this.showBoom(animState);
+        }
+      }
+
       return (
 
         <div className="chartHolder prob" key={prob.name}>
@@ -135,6 +181,13 @@ export default class Dashboard extends React.Component<any, any> {
           </div>
 
           {this.createChart(chartConfig)}
+
+          {
+            animState && animState.upperAnimOn &&
+            <div className="stateAnim">
+              <Boom />
+            </div>
+          }
         </div>
         
       );
@@ -144,8 +197,47 @@ export default class Dashboard extends React.Component<any, any> {
 
   };
 
+  state = {
+    animationStates: this.animationStates
+  }
+
   componentDidMount() {
-    this.setState(this.props.masterState);
+
+    this.setState((prevState: any) => {
+        return {
+          ...prevState,
+          masterState: this.props.masterState
+        }
+      }
+    );
+  }
+
+  componentDidUpdate() {
+
+    if (!this.animationLoaded) {
+      // push anim states
+      for (let exp of this.props.masterState.experiences) {
+        this.animationStates.push({
+          name: exp.name,
+          upperAnimOn: false,
+          bottomAnimOn: false
+        });
+      }
+
+      for (let prob of this.props.masterState.probabilities) {
+        this.animationStates.push({
+          name: prob.name,
+          upperAnimOn: false,
+          bottomAnimOn: false
+        });
+      }
+      if (this.animationStates.length >= 0 || this.animationLoadRetryTime > 5) {
+        this.animationLoaded = true;
+      } else {
+        this.animationLoadRetryTime++;
+      }
+    }
+
   }
 
   createChart = (inputConfig: any) => {

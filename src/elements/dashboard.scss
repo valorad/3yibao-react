@@ -31,6 +31,12 @@ section.dashboard {
     }
   }
 
+  .stateAnim {
+    z-index: 5;
+    position: relative;
+    right: 50%;
+  }
+
 
   @media only screen and (min-width: 900px) {
     .chartHolder {

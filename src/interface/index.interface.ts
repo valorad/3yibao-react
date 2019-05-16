@@ -15,7 +15,8 @@ interface probability {
   chart: {
     minValue: number,
     type: string
-  }
+  },
+  state: "normal" | "peak" | "valley"
   
 }
 
@@ -40,7 +41,8 @@ interface experience {
   message: {
     upgrade: message,
     downgrade: message
-  }
+  },
+  state: "normal" |"upgrade" | "downgrade"
 }
 
 export interface MasterState {
