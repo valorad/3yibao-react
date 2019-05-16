@@ -1,5 +1,7 @@
 section.dashboard {
 
+  overflow: hidden;
+
   > main {
     display: flex;
     flex-wrap: wrap;

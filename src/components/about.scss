@@ -1,0 +1,50 @@
+@import "../theme";
+
+section.about {
+  display: flex;
+  justify-content: center;
+  min-height: 90vh;
+  padding-top: 3em;
+  position: relative;
+  .logo {
+    width: 15em;
+    height: 15em;
+    margin: 1em auto;
+    border-radius: 50%;
+    border: 1em solid map-get($primary, "normal");
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  .holder {
+    text-align: center;
+    h1 {
+      font-size: 2em;
+    }
+    p {
+      margin: 0;
+    }
+  }
+
+  .react {
+    width: 5em;
+    height: 5em;
+    position: absolute;
+    right: -3em;
+    bottom: -3em;
+  }
+
+  img.avatar {
+    margin: 1em;
+    width: 3em;
+  }
+
+  main.descr {
+    margin: 3em auto;
+    p {
+      text-align: right;
+    }
+  }
+}
