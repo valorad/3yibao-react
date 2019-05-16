@@ -4,6 +4,8 @@ import {
   Link
 } from "react-router-dom";
 
+import reactLogo from "../assets/img/logo.svg";
+
 import "./navbar.scss";
 
 export default class Navbar extends React.Component {
@@ -12,14 +14,17 @@ export default class Navbar extends React.Component {
       <section className="navbar">
         <div className="strip"></div>
         <nav>
-          <h1>3yibao React</h1>
+          <header>
+            <h1>3yibao</h1>
+            <img className="reactLogo" src={reactLogo} alt="reactLogo"/>
+          </header>
           <main>
             <ul>
               <li>
-                <Link to="/index">index</Link>
+                <Link to="/index">首页</Link>
               </li>
               <li>
-                <Link to="/404">404</Link>
+                <Link to="/about">关于</Link>
               </li>
             </ul>
           </main>
@@ -27,7 +32,7 @@ export default class Navbar extends React.Component {
           <footer>
             <ul>
               <li>
-                <a href="##">Github</a>
+                <a target="_blank" href="https://github.com/valorad/3yibao-react" rel="noopener noreferrer"> <i className="iconfont icongithub"></i> 给特哈布</a>
               </li>
             </ul> 
           </footer>

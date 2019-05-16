@@ -8,6 +8,20 @@
     box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
   }
 
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 1em;
+    h1 {
+      margin: 0;
+    }
+    img {
+      width: 3em;
+      height: 3em;
+    }
+  }
+
   h1 {
     margin: 1em;
   }
