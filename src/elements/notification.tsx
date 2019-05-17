@@ -92,16 +92,19 @@ export default class Notification extends React.Component<notificationProp, any>
       switch (message.type) {
         case "success": 
           toast.success(message.content, {
+            position: toast.POSITION.BOTTOM_RIGHT,
             onClose: () => {resolve(message.id);}
           });
           break;
         case "error":
           toast.error(message.content, {
+            position: toast.POSITION.BOTTOM_RIGHT,
             onClose: () => {resolve(message.id);}
           })
           break;
         default:
           toast(message.content, {
+            position: toast.POSITION.BOTTOM_RIGHT,
             onClose: () => {resolve(message.id);}
           })
           break;

@@ -41,9 +41,9 @@ export default class Console extends React.Component<any> {
 
       this.logIndex++;
 
-    }
+      this.scrollToBottom();
 
-    this.scrollToBottom();
+    }
 
   }
 

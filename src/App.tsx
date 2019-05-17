@@ -19,7 +19,7 @@ export default class App extends Component {
   render() {
 
     return (
-      <section className="3yibaoReact">
+      <section className="t3yibaoReact">
         <Router>
           <Navbar />
           
@@ -31,7 +31,7 @@ export default class App extends Component {
             © 2019 Valorad the Oneiroseeker
           </footer>
         </Router>
-        <div>
+        <div className="notificationHolder">
           <ToastContainer />
         </div>
       </section>
