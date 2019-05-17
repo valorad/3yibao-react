@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {
-  BrowserRouter as Router
+  HashRouter as Router
 } from "react-router-dom";
 
 import './App.scss';
@@ -32,7 +32,7 @@ export default class App extends Component {
           </footer>
         </Router>
         <div className="notificationHolder">
-          <ToastContainer />
+          <ToastContainer autoClose={2000} />
         </div>
       </section>
     );

@@ -64,3 +64,4 @@ typings/
 *.lock
 package-*.json
 /.vscode/**
+/build/**
