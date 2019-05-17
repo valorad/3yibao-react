@@ -12,7 +12,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 1em;
+    a {
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 1em;
+      padding: 0 1em;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+    }
+  
+    a:hover {
+      color: white;
+      background-color: map-get($primary, "dark");
+      text-decoration: none;
+    }
+
     h1 {
       margin: 0;
     }

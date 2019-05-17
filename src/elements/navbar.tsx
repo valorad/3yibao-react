@@ -15,16 +15,18 @@ export default class Navbar extends React.Component {
         <div className="strip"></div>
         <nav>
           <header>
-            <h1>3yibao</h1>
-            <img className="reactLogo" src={reactLogo} alt="reactLogo"/>
+            <Link to="/index">
+              <h1>3yibao</h1>
+              <img className="reactLogo" src={reactLogo} alt="reactLogo"/>
+            </Link>
           </header>
           <main>
             <ul>
               <li>
-                <Link to="/index">首页</Link>
+                <Link to="/about">关于</Link>
               </li>
               <li>
-                <Link to="/about">关于</Link>
+                <a href="https://wcnexus.com"> wcnexus</a>
               </li>
             </ul>
           </main>

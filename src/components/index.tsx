@@ -70,7 +70,7 @@ export default class Index extends React.Component<any, MasterState> {
       name: "负能量",
       icon: "iconfunengliang",
       level: {
-        thresholds: [100, 0, -100, -200, -300, -400, -500, -750, -1000],
+        thresholds: [500, 300, 200, 100, 0, -100, -200, -300, -400, -500, -750, -1000],
         order: "desc"
       },
       offset: -1,
