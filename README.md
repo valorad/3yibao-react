@@ -2,7 +2,9 @@
 A screen-saver for teasing 3yibao, re-written in React
 三怡宝的日常放松专属屏保
 
-![demo](https://i.imgur.com/Vv8xw8g.gif)
+![demo](https://i.imgur.com/Vv8xw8g.gifv)
+
+Original Image: https://i.imgur.com/Vv8xw8g.gif (If Github says max content lenth exceeded)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) v3.
 
