@@ -43,7 +43,22 @@ The charts from [FusionCharts](https://github.com/fusioncharts/fusioncharts-dist
 ### Console and notification system
 
 ![console](https://i.imgur.com/N4mxSxu.png)
+
 You can press "~" key or click the billboard to open the console, and check the log of various events (upgrade / downgrade / probability too low, etc.) there.
 
 ![notification](https://i.imgur.com/CLOP0vA.png)
+
 Also, the events will pop up by notification system (which utilizes [react-toastify](https://github.com/fkhadra/react-toastify)). Note that the maximum number of notifications on the screen is limited to 5.
+
+
+## Credit
+
+react logo from [Create React App](https://github.com/facebook/create-react-app)
+
+explosion svg from [OnlyGFX](https://www.onlygfx.com/6-starburst-explosion-comic-vector-png-transparent-svg/)
+
+various icons from [iconfont](https://www.iconfont.cn)
+
+[react-toastify](https://github.com/fkhadra/react-toastify)
+
+[FusionCharts](https://github.com/fusioncharts/fusioncharts-dist)
