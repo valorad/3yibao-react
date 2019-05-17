@@ -86,10 +86,13 @@ export default class Dashboard extends React.Component<any, any> {
 
         <div className="chartHolder exp" key={exp.name}>
           <div className="chartTitle">
-            <h3>{exp.name}</h3>
+            <h3><i className={`iconfont ${exp.icon}`}></i>{exp.name}</h3>
             <div className="flexSpacer"></div>
-            <p>当前值：{exp.currentValue} / {nextThreshold}</p>
-            <p>当前等级: {exp.level.now}</p>
+            <div>
+              <p>当前值：{exp.currentValue} / {nextThreshold}</p>
+              <p>当前等级: {exp.level.now}</p>
+            </div>
+
           </div>
 
           {this.createChart(chartConfig)}
@@ -133,12 +136,12 @@ export default class Dashboard extends React.Component<any, any> {
       }
 
       let probToDisplay = "";
-      if (prob.currentProb > prob.chart.minValue) {
+      if (prob.currentValue > prob.chart.minValue) {
 
-        if (prob.currentProb > 95) {
+        if (prob.currentValue > 95) {
           probToDisplay = chartMessage.peak.replace(/<%yibao>/g, this.props.masterState.yibao);
         } else {
-          probToDisplay = prob.currentProb.toFixed(2) + " % ";
+          probToDisplay = prob.currentValue.toFixed(2) + " % ";
         }
         
       } else {
@@ -154,10 +157,10 @@ export default class Dashboard extends React.Component<any, any> {
           numberSuffix: " %",
           caption: "",
           subcaption: "",
-          // subcaption: prob.currentProb > prob.chart.minValue ? "当前值：" + prob.currentProb + " % ": loseMessage,
+          // subcaption: prob.currentValue > prob.chart.minValue ? "当前值：" + prob.currentValue + " % ": loseMessage,
           // yaxisname: "概率 (%)",
         },
-        nextValue: prob.currentProb,
+        nextValue: prob.currentValue,
         minValue: prob.chart.minValue
       };
 
@@ -175,7 +178,7 @@ export default class Dashboard extends React.Component<any, any> {
         <div className="chartHolder prob" key={prob.name}>
 
           <div className="chartTitle">
-            <h3>{prob.name}</h3>
+            <h3><i className={`iconfont ${prob.icon}`}></i>{prob.name}</h3>
             <div className="flexSpacer"></div>
             <p>{probToDisplay}</p>
           </div>

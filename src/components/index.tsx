@@ -23,6 +23,8 @@ export default class Index extends React.Component<any, MasterState> {
 
   nextMessageId = 0;
 
+  defaultIcon = "iconhuoguo";
+
   newMessage = {
     id: 0,
     content: "",
@@ -39,7 +41,7 @@ export default class Index extends React.Component<any, MasterState> {
   newExperience: any[] = [
     {
       name: "活力",
-      
+      icon: "iconhuoli",
       level: {
         thresholds: [-1000, -500, -300, -200, -150, -100, -50, 0, 100, 200, 300, 500, 750, 1000, 1500, 2000, 3000, 5000],
         order: "asc"
@@ -64,7 +66,7 @@ export default class Index extends React.Component<any, MasterState> {
     },
     {
       name: "负能量",
-      
+      icon: "iconfunengliang",
       level: {
         thresholds: [100, 0, -100, -200, -300, -400, -500, -750, -1000],
         order: "desc"
@@ -92,8 +94,9 @@ export default class Index extends React.Component<any, MasterState> {
   newProbabilities: any[] = [
     {
       name: "彩票中特等概率",
+      icon: "iconcaipiao",
       offset: 0.523,
-      currentProb: 50 ,
+      currentValue: 50 ,
       chart: {
         minValue: 0.001,
         type: "gauge"
@@ -112,8 +115,9 @@ export default class Index extends React.Component<any, MasterState> {
     },
     {
       name: "减肥成功率",
+      icon: "iconjianfei",
       offset: 0.518,
-      currentProb: 30 ,
+      currentValue: 30 ,
       chart: {
         minValue: 0.001,
         type: "gauge"
@@ -184,8 +188,9 @@ export default class Index extends React.Component<any, MasterState> {
     for (let prob of this.newProbabilities) {
       probs.push({
         name: prob.name,
+        icon: prob.icon || this.defaultIcon,
         offset: prob.offset || 0,
-        currentProb: prob.currentProb || 50, // <-- in percentage %
+        currentValue: prob.currentValue || 50, // <-- in percentage %
         chart: {
           minValue: prob.chart.minValue || 0.00001,
           type: prob.chart.type || "line"
@@ -220,19 +225,19 @@ export default class Index extends React.Component<any, MasterState> {
 
     for (let prob of nextProbs) {
 
-      let prevProb = prob.currentProb;
+      let prevProb = prob.currentValue;
       prob.state = "normal";
 
-      prob.currentProb *= Math.random() + prob.offset;
-      if (prob.currentProb > 100) {
-        prob.currentProb = 100;
+      prob.currentValue *= Math.random() + prob.offset;
+      if (prob.currentValue > 100) {
+        prob.currentValue = 100;
       }
-      if (!(prevProb > 95) && prob.currentProb > 95) {
+      if (!(prevProb > 95) && prob.currentValue > 95) {
         this.logToConsole(prob.message.peak.notification, "success");
         this.notify(prob.message.peak.notification, "success");
         prob.state = "peak";
 
-      } else if (!(prevProb < prob.chart.minValue) && prob.currentProb < prob.chart.minValue){
+      } else if (!(prevProb < prob.chart.minValue) && prob.currentValue < prob.chart.minValue){
         this.logToConsole(prob.message.valley.notification, "error");
         this.notify(prob.message.valley.notification, "error");
         prob.state = "valley";
@@ -267,6 +272,7 @@ export default class Index extends React.Component<any, MasterState> {
 
       exps.push({
         name: exp.name,
+        icon: exp.icon || this.defaultIcon,
         offset: exp.offset || 0,
         magnifier: exp.magnifier || 1,
         level: {

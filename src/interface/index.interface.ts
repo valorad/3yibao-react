@@ -4,10 +4,22 @@ interface message {
 }
 
 
-interface probability {
+interface yibaoAttributes {
   name: string,
+  icon: string,
+  currentValue: number,
+  chart: {
+    minValue: number,
+    type: string
+  },
+  message: {},
+  state: string
+}
+
+interface probability extends yibaoAttributes {
+
   offset: number,
-  currentProb: number, // <-- in percentage %
+  currentValue: number, // <-- in percentage %
   message: {
     peak: message, // message to send when reach 95%
     valley: message // message to send console when drop below minValue
@@ -20,9 +32,8 @@ interface probability {
   
 }
 
-interface experience {
-  name: string,
-  
+interface experience extends yibaoAttributes {
+ 
   offset: number,
   magnifier: number,
   level: {
@@ -34,15 +45,12 @@ interface experience {
     now: number
   }
   currentValue: number,
-  chart: {
-    minValue: number,
-    type: string
-  },
   message: {
     upgrade: message,
     downgrade: message
   },
-  state: "normal" |"upgrade" | "downgrade"
+  state: "normal" |"upgrade" | "downgrade",
+
 }
 
 export interface MasterState {

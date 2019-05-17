@@ -1,3 +1,5 @@
+@import "../theme";
+
 section.dashboard {
 
   overflow: hidden;
@@ -19,14 +21,25 @@ section.dashboard {
   }
 
   .chartTitle {
+    width: 100%;
     display: flex;
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    margin: 0 4em;
-    .flexSpacer {
-      min-width: 10em;
+
+    h3 {
+      font-size: 1.9em;
+      align-items: center;
+      justify-content: center;
+      display: flex;  
     }
+    i {
+      color: map-get($primary, "dark");
+      font-size: 1em;
+      margin: 0 0.5em
+    }
+
+
     p {
       margin: 0.5em 1em;
       min-width: 10em;
@@ -45,6 +58,7 @@ section.dashboard {
       width: 50%;
     }
     .chartTitle {
+      margin: 0 4em;
       .flexSpacer {
         min-width: unset;
       }
