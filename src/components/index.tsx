@@ -23,6 +23,8 @@ export default class Index extends React.Component<any, MasterState> {
 
   nextMessageId = 0;
 
+  calcTimer: any = null;
+
   defaultIcon = "iconhuoguo";
 
   newMessage = {
@@ -444,12 +446,15 @@ export default class Index extends React.Component<any, MasterState> {
     this.createExperiences();
     this.createProbabilities();
     
-    setInterval(() => {
+    this.calcTimer = setInterval(() => {
       this.calcNext();
     }, 200);
     
   }
 
+  componentWillUnmount() {
+    clearInterval(this.calcTimer);
+  }
 
 
   render() {

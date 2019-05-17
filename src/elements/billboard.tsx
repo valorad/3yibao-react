@@ -7,8 +7,16 @@ export default class Billboard extends React.Component<any> {
   settings = {
     numRow: 5,
     numColumn: 20,
-    lightInterval: 50
+    lightInterval: 50,
+    lightActive: false
   };
+
+  timers: any = {
+    top: null,
+    left: null,
+    bottom: null,
+    right: null
+  }
 
   refresh = () => {
     this.setState(
@@ -69,7 +77,7 @@ export default class Billboard extends React.Component<any> {
 
   lightCarousel = async () => {
 
-    while (true) {
+    while (this.settings.lightActive) {
       await this.lightManager();
     }
 
@@ -88,7 +96,7 @@ export default class Billboard extends React.Component<any> {
       // clear the last exec state
       bottomRow[bottomRow.length - 1].active = false;
   
-      let timer = setInterval(
+      this.timers.bottom = setInterval(
         () => {
 
           bottomRow[bulbIndex].active = true;
@@ -98,7 +106,7 @@ export default class Billboard extends React.Component<any> {
           bulbIndex++;
           this.refresh();
           if (bulbIndex >= bottomRow.length) {
-            clearInterval(timer)
+            clearInterval(this.timers.bottom)
             resolve();
           }
         },
@@ -120,7 +128,7 @@ export default class Billboard extends React.Component<any> {
       // clear the last exec state
       bottomRow[0].active = false;
 
-      let timer = setInterval(
+      this.timers.top = setInterval(
         () => {
 
           bottomRow[bulbIndex].active = true;
@@ -130,7 +138,7 @@ export default class Billboard extends React.Component<any> {
           bulbIndex--;
           this.refresh();
           if (bulbIndex < 0) {
-            clearInterval(timer);
+            clearInterval(this.timers.top);
             resolve();
           }
         },
@@ -159,7 +167,7 @@ export default class Billboard extends React.Component<any> {
 
       // console.log(lastColumn);
 
-      let timer = setInterval(
+      this.timers.right = setInterval(
         () => {
 
           lastColumn[bulbIndex].active = true;
@@ -169,7 +177,7 @@ export default class Billboard extends React.Component<any> {
           bulbIndex--;
           this.refresh();
           if (bulbIndex < 0) {
-            clearInterval(timer);
+            clearInterval(this.timers.right);
             resolve();
           }
         },
@@ -196,7 +204,7 @@ export default class Billboard extends React.Component<any> {
       // clear the last exec state
       firstColumn[lastCell].active = false;
 
-      let timer = setInterval(
+      this.timers.left = setInterval(
         () => {
 
           firstColumn[bulbIndex].active = true;
@@ -206,7 +214,7 @@ export default class Billboard extends React.Component<any> {
           bulbIndex++;
           this.refresh();
           if (bulbIndex >= this.state.lightMatrix.length) {
-            clearInterval(timer);
+            clearInterval(this.timers.left);
             resolve();
           }
         },
@@ -224,7 +232,15 @@ export default class Billboard extends React.Component<any> {
 
 
   componentDidMount() {
+    this.settings.lightActive = true;
     this.lightCarousel();
+  }
+
+  componentWillUnmount() {
+    this.settings.lightActive = false;
+    for (let key in this.timers) {
+      clearInterval(this.timers[key]);
+    }
   }
 
   render() {
