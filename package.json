@@ -2,6 +2,7 @@
   "name": "3yibao-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://wcnexus.com/3yibao",
   "dependencies": {
     "bootstrap": "^4.3.1",
     "fusioncharts": "^3.13.4",
