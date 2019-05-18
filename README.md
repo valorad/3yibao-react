@@ -12,7 +12,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Description
 
-This site is used as a dashboard to describe the general attributes of the funny character 3yibao (e.g. the energy level, bad-luck points, jackpot chances and probability of losing weight) by some random algorithms. The attributes are all customizable. It is now using react framework at the front, and a simple go echo framework at the back-end.
+This funny site is used as a dashboard to describe the general attributes of the funny character 3yibao (e.g. the energy level, bad-luck points, jackpot chances and probability of losing weight) by some random algorithms. The attributes are all customizable. It is now using react framework at the front, and a simple go echo framework at the back-end.
 
 ### Yibao Attributes
 
