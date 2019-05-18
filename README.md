@@ -8,7 +8,7 @@ A screen-saver for teasing 3yibao, re-written in React
 
 Original Image: https://i.imgur.com/Vv8xw8g.gif (If Github says max content length exceeded)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) v3.
+3yibao(三怡宝, Troisième C'est bon) was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) v3.
 
 ## Description
 
