@@ -1,8 +1,9 @@
 # 3yibao-react
 A screen-saver for teasing 3yibao, re-written in React
+
 三怡宝的日常放松专属屏保
 
-[English](./readme.md)
+[English](./README.md)
 
 ![demo](https://i.imgur.com/Vv8xw8g.gif)
 
