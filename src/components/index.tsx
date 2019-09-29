@@ -135,6 +135,27 @@ export default class Index extends React.Component<any, MasterState> {
         }
       }
       
+    },
+    {
+      name: "咖啡飘香指数",
+      icon: "iconkafei",
+      offset: 0.505,
+      currentValue: 10 ,
+      chart: {
+        minValue: 0.001,
+        type: "gauge"
+      },
+      message: {
+        peak: {
+          chart: "",  // <- display beside chart
+          notification: ""  // <- to notification and console
+        },
+        valley: {
+          chart: "<%yibao>怡宝的咖啡中有一股💩味",  // <- display beside chart
+          notification: "<%yibao>怡宝的咖啡中有一股💩味"  // <- to notification and console
+        }
+      }
+      
     }
   ];
 
